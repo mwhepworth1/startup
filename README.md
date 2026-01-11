@@ -37,7 +37,7 @@ Here's a diagram that reflects how people would interact with the central server
 ```mermaid
 sequenceDiagram
     actor Player1
-    actor Server
+    participant Server
     actor Player2
     actor Player3
     actor Player4

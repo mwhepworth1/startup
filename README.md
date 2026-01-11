@@ -29,7 +29,8 @@ Have you ever seen a reel on Instagram, opened the comment section, and laughed 
 
 ### Design
 
-![Design image](placeholder.png)
+![Signin Design Image](signin_mockup.png)
+![Game Design Image](game_mockup.png)
 
 Here's a diagram that reflects how people would interact with the central server to play the game. This diagram is a four player scenario.
 

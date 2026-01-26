@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Comment - Play</title>
+</head>
+<body>
+    <header>
+        <h1>Top Comment</h1>
+        <nav>
+            <menu>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="play.html">Play</a></li>
+                <li><a href="scores.html">Scores</a></li>
+                <li><a href="about.html">About</a></li>
+            </menu>
+        </nav>
+    </header>
+
+    <main>
+        <h2>Game Room</h2>
+        
+        <!-- Application Data -->
+        <section class="game-area">
+            <div class="prompt-box">
+                <h3>Prompt: "Your reaction when the server crashes"</h3>
+            </div>
+            
+            <div class="player-hand">
+                <input type="text" placeholder="Search for a GIF...">
+                <button>Search</button>
+                <div class="gif-results">
+                    <!-- Placeholder for GIF results -->
+                    <p>[GIF 1]</p>
+                    <p>[GIF 2]</p>
+                    <p>[GIF 3]</p>
+                </div>
+            </div>
+
+            <div class="submissions">
+                <h3>Current Submissions</h3>
+                <ul>
+                    <li>Player 2 submitted a GIF <button>Like</button></li>
+                    <li>Player 3 submitted a GIF <button>Like</button></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- WebSocket Data -->
+        <aside class="live-events">
+            <h3>Live Events</h3>
+            <ul>
+                <li>User X joined the room</li>
+                <li>New round started</li>
+                <li>Player 2 voted</li>
+            </ul>
+        </aside>
+    </main>
+
+    <footer>
+        <p>Created by Matthew</p>
+        <p><a href="https://github.com/mwhepworth1/startup">GitHub</a></p>
+    </footer>
+</body>
+</html>

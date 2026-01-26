@@ -10,8 +10,8 @@
 
 ## AWS
 
-My IP address is: 54.81.96.130
-Launching my AMI I initially put it on a private subnet. Even though it had a public IP address and the security group was right, I wasn't able to connect to it.
+IP: 13.223.210.39
+Domain: mhep.link
 
 ## Caddy
 
@@ -97,3 +97,14 @@ Handling the toggling of the checkboxes was particularly interesting.
   ))}
 </div>
 ```
+
+## Startup HTML Structure
+
+I have created the initial HTML structure for the Top Comment application. This includes:
+
+- **index.html**: Introduction and login/register controls.
+- **play.html**: The main game interface with placeholders for WebSocket data (live events) and game interaction.
+- **scores.html**: A leaderboard displaying persistent data.
+- **about.html**: Description of the application and a placeholder for the 3rd party service (Giphy).
+
+All pages include a consistent header for navigation and a footer with GitHub links.

@@ -21,6 +21,9 @@ No problems worked just like it said in the [instruction](https://github.com/web
 
 No sweat on this part, super simple. Just added some basic elements to help structure the webpage(s)
 
+<aside> - This seems kinda cool and it seems to be supported in html5: https://www.w3schools.com/tags/tag_aside.asp
+<blockquote> - https://www.w3schools.com/tags/tag_blockquote.asp
+
 ## CSS
 
 This took a couple hours to get it how I wanted. It was important to make it responsive and Bootstrap helped with that. It looks great on all kinds of screen sizes.

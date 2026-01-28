@@ -88,15 +88,15 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **HTML pages** - I did not complete this part of the deliverable.
-- [ ] **Proper HTML element usage** - I did not complete this part of the deliverable.
-- [ ] **Links** - I did not complete this part of the deliverable.
-- [ ] **Text** - I did not complete this part of the deliverable.
-- [ ] **3rd party API placeholder** - I did not complete this part of the deliverable.
-- [ ] **Images** - I did not complete this part of the deliverable.
-- [ ] **Login placeholder** - I did not complete this part of the deliverable.
-- [ ] **DB data placeholder** - I did not complete this part of the deliverable.
-- [ ] **WebSocket placeholder** - I did not complete this part of the deliverable.
+- [x] **HTML pages** - I built four main HTML pages: a home/login page, a game play page, a leaderboard/scores page, and an about page to give some context.
+- [x] **Proper HTML element usage** - I used semantic tags like `<header>`, `<nav>`, `<main>`, and `<footer>` on every page to keep things organized. I also used `<section>` and `<aside>` for specific parts of the gameplay UI.
+- [x] **Links** - All the pages are linked together in a navigation menu. I also included a link to my GitHub repo in the footer so people can see the code.
+- [x] **Text** - I added text to explain the game's rules on the about page and included example prompts and status messages in the game room.
+- [x] **3rd party API placeholder** - On the about page, I added a placeholder for a "Daily Featured GIF" from Giphy. The play page also has a search bar and some hardcoded GIFs to show where the API results will go.
+- [x] **Images** - I've got a placeholder image for a game screenshot on the about page and used several GIF images on the play page to simulate the search results.
+- [x] **Login placeholder** - The index page has a login form with email and password fields, plus buttons for logging in or creating a new account.
+- [x] **DB data placeholder** - The scores page uses tables to show how I'll display leaderboard and friend data from the database later on. 
+- [x] **WebSocket placeholder** - I added a "Live Events" sidebar on the play page that shows real-time updates like users joining or the round timer, which will eventually be powered by WebSockets.
 
 ## 🚀 CSS deliverable
 

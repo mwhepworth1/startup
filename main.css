@@ -180,13 +180,25 @@ input::placeholder { /* this is the color of the text in the form */
 }
 
 .gif-grid {
-    display: grid; 
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
-    gap: 1rem; 
-    align-content: start;
-    flex-grow: 1;
-    overflow: auto;
+    column-count: 2; 
+    column-gap: 1rem;
+    height: 400px;          
+    overflow-y: auto;       
+    overflow-x: hidden;     
     padding: 0.5rem;
+    padding-right: 1rem;    
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .gif-grid {
+        column-count: 3;
+    }
+}
+@media (min-width: 1200px) {
+    .gif-grid {
+        column-count: 4; 
+    }
 }
 
 .input-group .form-control {
@@ -205,16 +217,23 @@ input::placeholder { /* this is the color of the text in the form */
 .gif-item {
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: inline-block; 
+    width: 100%;           
+    margin-bottom: 1rem;   
+    break-inside: avoid;   
 }
 
 .gif-item:hover {
-    transform: scale(1.05);
+    transform: scale(1.02); 
     z-index: 10;
 }
 
+
 .gif-item img {
-    height: 150px;
-    object-fit: cover;
+    width: 100%;
+    height: auto; 
+    object-fit: contain; 
+    border-radius: 8px; 
 }
 
 .list-group-item {

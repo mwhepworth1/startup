@@ -35,6 +35,7 @@ Key things learned and implemented:
 - **Flexbox**: Used `d-flex flex-column min-vh-100` on the body to create a sticky footer that stays at the bottom even when content is short.
 - **CSS Grid**: Used `display: grid` for the GIF results area to create a responsive gallery that auto-fills columns based on screen width (`repeat(auto-fill, minmax(200px, 1fr))`).
 - **Google Fonts**: Integrated the 'Lexend' font to give the app a more modern, clean look.
+- **Positioning**: This is rough, this doc was very helpful in my efforts to move my title to the center of the navbar: https://getbootstrap.com/docs/5.3/utilities/position/
 
 ```css
 /* Example of using CSS Variables and Grid */

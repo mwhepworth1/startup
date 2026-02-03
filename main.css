@@ -92,6 +92,21 @@ input::placeholder { /* this is the color of the text in the form */
 }
 
 
+/* about.html */
+.about-card {
+    background-color: var(--secondary-background-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+.content-scrollable {
+    overflow-y: auto !important;
+}
+
+.blockquote-footer {
+    color: var(--link-color);
+}
+
 /* play.html */
 .game-area {
     background: var(--background-color);

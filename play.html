@@ -80,22 +80,13 @@
                         <div class="flex-shrink-0 mb-4 w-100">
                             <h2 class="mb-4">Find your perfect GIF</h2>
                             <div class="input-group input-group-lg shadow-sm gif-search-container">
-                                <input type="text" class="form-control" placeholder="Search GIPHY...">
-                                <button class="btn btn-primary px-4 fw-bold" type="button">SEARCH</button>
+                                <input type="text" id="searchInput" class="form-control" placeholder="Search GIPHY...">
+                                <button class="btn btn-primary px-4 fw-bold" id="searchBtn" type="button" onclick="searchGiphy()">SEARCH</button>
                             </div>
                         </div>
 
-                        <div class="gif-grid">
+                        <div class="gif-grid" id="gifGrid">
                             <!-- Placeholder for GIF results -->
-                            <div class="gif-item"><img src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ3c2dTZoaHJzOW9ydmZtNzE4eW4wZWtsdWk1dW0wcWkwNHBtemRxYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/10UHehEC098kAE/giphy.gif" alt="GIF 1" class="img-fluid rounded shadow-sm w-100 h-100 object-fit-cover"></div>
-                            <div class="gif-item"><img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDhjN3N0N3VsczFqbDl4YmwxODNicGExMDBqY251aWVvNmdra21wZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/QW1nG7xLMJHsk/giphy.gif" alt="GIF 2" class="img-fluid rounded shadow-sm w-100 h-100 object-fit-cover"></div>
-                            <div class="gif-item"><img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExOTNkMGFiMG5xcW45bzN1eHl5eTdhNWhqaW84emQ1dDRha3Y5Y2txcyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/tEG1nF1v7AL8A/giphy.gif" alt="GIF 3" class="img-fluid rounded shadow-sm w-100 h-100 object-fit-cover"></div>
-                             <div class="gif-item"><img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDhjN3N0N3VsczFqbDl4YmwxODNicGExMDBqY251aWVvNmdra21wZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/QW1nG7xLMJHsk/giphy.gif" alt="GIF 4" class="img-fluid rounded shadow-sm w-100 h-100 object-fit-cover"></div>
-                             <div class="gif-item"><img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDhjN3N0N3VsczFqbDl4YmwxODNicGExMDBqY251aWVvNmdra21wZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/QW1nG7xLMJHsk/giphy.gif" alt="GIF 4" class="img-fluid rounded shadow-sm w-100 h-100 object-fit-cover"></div>
-                             <div class="gif-item"><img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDhjN3N0N3VsczFqbDl4YmwxODNicGExMDBqY251aWVvNmdra21wZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/QW1nG7xLMJHsk/giphy.gif" alt="GIF 4" class="img-fluid rounded shadow-sm w-100 h-100 object-fit-cover"></div>
-                             <div class="gif-item"><img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDhjN3N0N3VsczFqbDl4YmwxODNicGExMDBqY251aWVvNmdra21wZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/QW1nG7xLMJHsk/giphy.gif" alt="GIF 4" class="img-fluid rounded shadow-sm w-100 h-100 object-fit-cover"></div>
-                             <div class="gif-item"><img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDhjN3N0N3VsczFqbDl4YmwxODNicGExMDBqY251aWVvNmdra21wZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/QW1nG7xLMJHsk/giphy.gif" alt="GIF 4" class="img-fluid rounded shadow-sm w-100 h-100 object-fit-cover"></div>
-                             <div class="gif-item"><img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDhjN3N0N3VsczFqbDl4YmwxODNicGExMDBqY251aWVvNmdra21wZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/QW1nG7xLMJHsk/giphy.gif" alt="GIF 4" class="img-fluid rounded shadow-sm w-100 h-100 object-fit-cover"></div>
                         </div>
                     </div>
                 </section>
@@ -112,5 +103,65 @@
     
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Giphy Search Script -->
+    <script>
+        function searchGiphy() {
+            const input = document.querySelector('#searchInput');
+            const grid = document.querySelector('#gifGrid');
+            const query = input.value;
+            
+            const apiKey = ''; 
+
+            if (!query) return;
+
+            grid.innerHTML = '<p class="text-center w-100 text-white">Loading...</p>';
+
+            const url = `https://api.giphy.com/v1/gifs/search?api_key=${apiKey}&q=${encodeURIComponent(query)}&limit=50&rating=g`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(content => {
+                    grid.innerHTML = ''; 
+
+                    if (content.data.length === 0) {
+                        grid.innerHTML = '<p class="text-center w-100 text-white">No results found.</p>';
+                        return;
+                    }
+
+                    content.data.forEach(gif => {
+                        const gifUrl = gif.images.fixed_width.url;
+                        const altText = gif.title;
+
+                        const div = document.createElement('div');
+                        div.className = 'gif-item';
+                        
+                        const img = document.createElement('img');
+                        img.src = gifUrl;
+                        img.alt = altText;
+                        img.className = 'img-fluid rounded shadow-sm w-100 mb-2';
+                        
+                        div.onclick = () => {
+                            console.log('Selected GIF:', gifUrl);
+                            document.querySelectorAll('.gif-item img').forEach(i => i.style.border = 'none');
+                            img.style.border = '4px solid var(--primary-color)';
+                        };
+
+                        div.appendChild(img);
+                        grid.appendChild(div);
+                    });
+                })
+                .catch(err => {
+                    console.error('Error fetching GIFs:', err);
+                    grid.innerHTML = '<p class="text-danger text-center w-100">Error loading GIFs.</p>';
+                });
+        }
+        
+        document.querySelector('#searchInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                searchGiphy();
+            }
+        });
+    </script>
 </body>
 

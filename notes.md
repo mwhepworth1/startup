@@ -26,38 +26,29 @@ No sweat on this part, super simple. Just added some basic elements to help stru
 
 ## CSS
 
-This took a couple hours to get it how I wanted. It was important to make it responsive and Bootstrap helped with that. It looks great on all kinds of screen sizes.
+I learned how to integrate a CSS framework (Bootstrap) with custom CSS. It was interesting to see how Bootstrap handles responsiveness out of the box with its grid system and utility classes.
+I also found a helpful resource: https://getbootstrap.com/docs/4.0/examples/sticky-footer-navbar/ that I could inspect to use to my benefit. These docs are super helpful
 
-Bootstrap seems a bit like magic. It styles things nicely, but is very opinionated. You either do, or you do not. There doesn't seem to be much in between.
+Key things learned and implemented:
+- **Bootstrap 5**: Used for the main structure, including the responsive navbar, tables, and card components. It definitely speeds up development but requires checking the docs frequently for class names.
+- **Custom CSS Override**: Created a `main.css` file to define custom variables (colors) and specific styles that Bootstrap didn't cover, like the prompt box and custom hover effects on the GIF images.
+- **Flexbox**: Used `d-flex flex-column min-vh-100` on the body to create a sticky footer that stays at the bottom even when content is short.
+- **CSS Grid**: Used `display: grid` for the GIF results area to create a responsive gallery that auto-fills columns based on screen width (`repeat(auto-fill, minmax(200px, 1fr))`).
+- **Google Fonts**: Integrated the 'Lexend' font to give the app a more modern, clean look.
 
-I did like the navbar it made it super easy to build a responsive header.
+```css
+/* Example of using CSS Variables and Grid */
+:root {
+    --primary-color: #007bff;
+    --background-color: #f8f9fa;
+}
 
-```html
-      <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-          <a class="navbar-brand">
-            <img src="logo.svg" width="30" height="30" class="d-inline-block align-top" alt="" />
-            Calmer
-          </a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link active" href="play.html">Play</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="about.html">About</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="index.html">Logout</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-    </header>
+.gif-results {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+```
 ```
 
 I also used SVG to make the icon and logo for the app. This turned out to be a piece of cake.

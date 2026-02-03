@@ -102,12 +102,12 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Visually appealing colors and layout. No overflowing elements.** - I did not complete this part of the deliverable.
-- [ ] **Use of a CSS framework** - I did not complete this part of the deliverable.
-- [ ] **All visual elements styled using CSS** - I did not complete this part of the deliverable.
-- [ ] **Responsive to window resizing using flexbox and/or grid display** - I did not complete this part of the deliverable.
-- [ ] **Use of a imported font** - I did not complete this part of the deliverable.
-- [ ] **Use of different types of selectors including element, class, ID, and pseudo selectors** - I did not complete this part of the deliverable.
+- [x] **Visually appealing colors and layout. No overflowing elements.** - I implemented a dark-mode aesthetic using a custom color palette (dark grey/purple) and ensured the layout fits the viewport height without unwanted scrollbars, specifically using `overflow: hidden` on the main body and specific scroll areas for content.
+- [x] **Use of a CSS framework** - I utilized Bootstrap 5 for the core layout structure (containers, rows, cols), navigation bar, and standard components like buttons and forms.
+- [x] **All visual elements styled using CSS** - Every element, including the game cards, leaderboard tables, and input fields, has been styled to match the dark theme, overriding default browser styles and some Bootstrap defaults.
+- [x] **Responsive to window resizing using flexbox and/or grid display** - The application uses Flexbox for the sticky footer and vertical alignment. I implemented a responsive column-count layout (Masonry style) for the GIF grid that adjusts from 1 to 4 columns based on screen width.
+- [x] **Use of a imported font** - I imported the 'Lexend' font family from Google Fonts and applied it globally to the body element.
+- [x] **Use of different types of selectors including element, class, ID, and pseudo selectors** - I used class selectors for components (`.game-card`), element selectors for base styles (`body`, `main`), and pseudo-selectors for interactivity (`:hover` on GIFs, `:focus` on inputs, and `:nth-child` for table striping).
 
 ## 🚀 React part 1: Routing deliverable
 

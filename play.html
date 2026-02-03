@@ -32,57 +32,73 @@
         </nav>
     </header>
 
-    <main class="container">
-        <h2 class="mb-4">Game Room</h2>
+    <main class="container-fluid py-4 px-4 flex-fill d-flex flex-column gap-4 justify-content-center">
         
-        <div class="row">
-            <!-- Application Data -->
-            <div class="col-lg-9">
-                <section class="game-area">
-                    <div class="prompt-box">
-                        <h3>Prompt: "Your reaction when you get rickrolled on I-15"</h3>
-                    </div>
-                    
-                    <div class="player-hand mb-4">
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="Search for a GIF..." aria-label="Search">
-                            <button class="btn btn-primary" type="button">Search</button>
-                        </div>
-                        <div class="gif-results">
-                            <!-- Placeholder for GIF results -->
-                            <div><img src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ3c2dTZoaHJzOW9ydmZtNzE4eW4wZWtsdWk1dW0wcWkwNHBtemRxYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/10UHehEC098kAE/giphy.gif" alt="GIF 1" class="img-fluid rounded"></div>
-                            <div><img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDhjN3N0N3VsczFqbDl4YmwxODNicGExMDBqY251aWVvNmdra21wZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/QW1nG7xLMJHsk/giphy.gif" alt="GIF 2" class="img-fluid rounded"></div>
-                            <div><img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExOTNkMGFiMG5xcW45bzN1eHl5eTdhNWhqaW84emQ1dDRha3Y5Y2txcyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/tEG1nF1v7AL8A/giphy.gif" alt="GIF 3" class="img-fluid rounded"></div>
-                        </div>
-                    </div>
+        <!-- Top: Prompt -->
+        <section class="card game-card prompt-card text-center p-4 shadow-sm border-0 flex-shrink-0 w-100">
+            <h5 class="text-uppercase muted small fw-bold">Current Prompt</h5>
+            <h3 class="fw-bold mb-0">"Your reaction when you get rickrolled on I-15"</h3>
+        </section>
 
-                    <div class="submissions">
-                        <h3>Current Submissions</h3>
-                        <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Player 2 submitted a GIF 
-                                <button class="btn btn-sm btn-outline-primary" disabled>Like</button>
+        <div class="row h-75 lower-game g-4">
+            <div class="col-lg-2 d-flex flex-column gap-4 h-100">
+
+                <!-- Submissions -->
+                <section class="card game-card submissions-card p-3 shadow-sm border-0 d-flex flex-column h-auto">
+                    <h5 class="card-title border-bottom pb-2 flex-shrink-0">Current Submissions</h5>
+                    <div class="overflow-auto">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center">
+                                <span>Player 2</span>
+                                <span class="badge bg-secondary">Waiting to Vote</span>
                             </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Player 3 submitted a GIF 
-                                <button class="btn btn-sm btn-outline-primary" disabled>Like</button>
+                            <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center">
+                                <span>Player 3</span>
+                                <span class="badge bg-success">Submitted</span>
                             </li>
                         </ul>
                     </div>
                 </section>
+
+                <!-- Sidebar (Live Events) -->
+                <aside class="card game-card live-events-card p-3 shadow-sm border-0 flex-shrink-0">
+                    <h5 class="card-title border-bottom pb-2">Live Events</h5>
+                    <div class="overflow-auto">
+                        <ul class="list-unstyled small live-events-list">
+                            <li class="mb-2"><span class="muted">10:02 AM</span> Player 2 joined</li>
+                            <li class="mb-2"><span class="muted">10:03 AM</span> Player 3 joined</li>
+                            <li class="mb-2 text-primary fw-bold">Round started!</li>
+                        </ul>
+                    </div>
+                </aside>
             </div>
 
-            <!-- Sidebar -->
-            <div class="col-lg-3">
-                <aside class="card p-3 shadow-sm">
-                    <h4>Live Events</h4>
-                    <ul class="list-unstyled small">
-                        <li class="mb-2 text-muted">Player 2 joined</li>
-                        <li class="mb-2 text-muted">Player 3 joined</li>
-                        <li class="mb-2 text-success">Round started!</li>
-                        <li class="mb-2 text-warning">10 seconds remaining</li>
-                    </ul>
-                </aside>
+            <!-- Right Panel: Player Interaction -->
+            <div class="col-lg-9 d-flex flex-column ">
+                <section class="gif-container game-area card game-card p-4 shadow-lg border-0 h-75 d-flex flex-column">
+                    <div class="player-hand-container text-center">
+                        <div class="flex-shrink-0 mb-4 w-100">
+                            <h2 class="mb-4">Find your perfect GIF</h2>
+                            <div class="input-group input-group-lg shadow-sm gif-search-container">
+                                <input type="text" class="form-control" placeholder="Search GIPHY...">
+                                <button class="btn btn-primary px-4 fw-bold" type="button">SEARCH</button>
+                            </div>
+                        </div>
+
+                        <div class="gif-grid">
+                            <!-- Placeholder for GIF results -->
+                            <div class="gif-item"><img src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ3c2dTZoaHJzOW9ydmZtNzE4eW4wZWtsdWk1dW0wcWkwNHBtemRxYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/10UHehEC098kAE/giphy.gif" alt="GIF 1" class="img-fluid rounded shadow-sm w-100 h-100 object-fit-cover"></div>
+                            <div class="gif-item"><img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDhjN3N0N3VsczFqbDl4YmwxODNicGExMDBqY251aWVvNmdra21wZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/QW1nG7xLMJHsk/giphy.gif" alt="GIF 2" class="img-fluid rounded shadow-sm w-100 h-100 object-fit-cover"></div>
+                            <div class="gif-item"><img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExOTNkMGFiMG5xcW45bzN1eHl5eTdhNWhqaW84emQ1dDRha3Y5Y2txcyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/tEG1nF1v7AL8A/giphy.gif" alt="GIF 3" class="img-fluid rounded shadow-sm w-100 h-100 object-fit-cover"></div>
+                             <div class="gif-item"><img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDhjN3N0N3VsczFqbDl4YmwxODNicGExMDBqY251aWVvNmdra21wZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/QW1nG7xLMJHsk/giphy.gif" alt="GIF 4" class="img-fluid rounded shadow-sm w-100 h-100 object-fit-cover"></div>
+                             <div class="gif-item"><img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDhjN3N0N3VsczFqbDl4YmwxODNicGExMDBqY251aWVvNmdra21wZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/QW1nG7xLMJHsk/giphy.gif" alt="GIF 4" class="img-fluid rounded shadow-sm w-100 h-100 object-fit-cover"></div>
+                             <div class="gif-item"><img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDhjN3N0N3VsczFqbDl4YmwxODNicGExMDBqY251aWVvNmdra21wZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/QW1nG7xLMJHsk/giphy.gif" alt="GIF 4" class="img-fluid rounded shadow-sm w-100 h-100 object-fit-cover"></div>
+                             <div class="gif-item"><img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDhjN3N0N3VsczFqbDl4YmwxODNicGExMDBqY251aWVvNmdra21wZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/QW1nG7xLMJHsk/giphy.gif" alt="GIF 4" class="img-fluid rounded shadow-sm w-100 h-100 object-fit-cover"></div>
+                             <div class="gif-item"><img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDhjN3N0N3VsczFqbDl4YmwxODNicGExMDBqY251aWVvNmdra21wZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/QW1nG7xLMJHsk/giphy.gif" alt="GIF 4" class="img-fluid rounded shadow-sm w-100 h-100 object-fit-cover"></div>
+                             <div class="gif-item"><img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDhjN3N0N3VsczFqbDl4YmwxODNicGExMDBqY251aWVvNmdra21wZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/QW1nG7xLMJHsk/giphy.gif" alt="GIF 4" class="img-fluid rounded shadow-sm w-100 h-100 object-fit-cover"></div>
+                        </div>
+                    </div>
+                </section>
             </div>
         </div>
     </main>

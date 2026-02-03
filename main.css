@@ -2,7 +2,8 @@
     --primary-color: #9702b4;
     --primary-color-hover: #7c0494;
     --secondary-color: #6c757d;
-    --background-color: #222222;
+    --background-color: #111;
+    --secondary-background-color: #222;
     --text-color: #e7e7e7;
     --link-color: #adb5bd;
     --border-color: #444;
@@ -15,16 +16,28 @@ body {
     color: var(--text-color);
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden;
 }
+
 
 main {
     flex: 1;
-    padding: 2rem 0;
+    padding: 1rem;
+    overflow: hidden;
 }
+.btn-primary {
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    border: none;
+}
+.btn-primary:hover {
+    background-color: var(--primary-color-hover);
+}
+
 /* Navbar */
 .navbar {
-    background-color: var(--background-color);
+    background-color: var(--secondary-background-color);
     border-bottom: 1px solid var(--border-color);
     color: var(--text-color) !important;
 }
@@ -42,7 +55,7 @@ main {
 
 /* Footer */
 footer {
-    background-color: var(--background-color);
+    background-color: var(--secondary-background-color);
     color: var(--text-color);
     padding: 1rem 0;
     text-align: center;
@@ -69,20 +82,138 @@ footer .container {
     color: var(--text-color);
     border: 1px solid var(--border-color);
 }
-.login input, .login input:hover, .login input:focus {
+input, input:hover, input:focus {
     background-color: var(--input-background);
     color: var(--text-color);
     border: 1px solid var(--border-color);
 }
-.login input::placeholder { /* this is the color of the text in the form */
-    color: var(--text-color);
-}
-.login .btn-primary {
-    background-color: var(--primary-color);
-    color: var(--text-color);
-    border: none;
-}
-.login .btn-primary:hover {
-    background-color: var(--primary-color-hover);
+input::placeholder { /* this is the color of the text in the form */
+    color: var(--text-color) !important;
 }
 
+
+/* play.html */
+.game-area {
+    background: var(--background-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.prompt-box {
+    background-color: var(--secondary-background-color);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    border-left: 5px solid var(--primary-color);
+}
+
+.gif-results {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.gif-results img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    transition: transform 0.2s;
+}
+
+.gif-results img:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+.game-card {
+    background-color: var(--secondary-background-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+.game-card .muted {
+    color: var(--link-color);
+}
+
+.prompt-card {
+    border-bottom: 5px solid var(--primary-color) !important;
+}
+
+.live-events-card {
+    max-height: 25%;
+}
+
+.player-hand-container {
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+
+.gif-search-container {
+    max-width: 900px;
+    width: 75%;
+    margin: 0 auto;
+}
+
+.gif-grid {
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+    gap: 1rem; 
+    align-content: start;
+    flex-grow: 1;
+    overflow: auto;
+    padding: 0.5rem;
+}
+
+.input-group .form-control {
+    background-color: var(--input-background);
+    border-color: var(--border-color);
+    color: white;
+}
+
+.input-group .form-control:focus {
+    background-color: #444;
+    border-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 0 0 0.25rem rgba(151, 2, 180, 0.25);
+}
+
+.gif-item {
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.gif-item:hover {
+    transform: scale(1.05);
+    z-index: 10;
+}
+
+.gif-item img {
+    height: 150px;
+    object-fit: cover;
+}
+
+.list-group-item {
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+
+.submissions-card {
+    height: fit-content;
+    max-height: none;
+}
+.lower-game {
+    margin-top: 5vh;
+}
+.gif-container {
+    margin-left: 10vw;
+}

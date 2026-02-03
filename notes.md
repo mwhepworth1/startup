@@ -26,28 +26,26 @@ No sweat on this part, super simple. Just added some basic elements to help stru
 
 ## CSS
 
-I learned how to integrate a CSS framework (Bootstrap) with custom CSS. It was interesting to see how Bootstrap handles responsiveness out of the box with its grid system and utility classes.
-I also found a helpful resource: https://getbootstrap.com/docs/4.0/examples/sticky-footer-navbar/ that I could inspect to use to my benefit. These docs are super helpful
+I learned a lot about how to make a professional looking application using Bootstrap. I struggled a bit with getting the layout to work exactly how I wanted it to. I had to use a lot of different classes to get things to line up correctly. I think the hardest part was getting the page to not scroll, but instead just have the content scroll. I used `overflow: hidden` on the body and then `overflow: auto` on the content that I wanted to scroll. I also used `flex-grow-1` to make sure that the content took up all the available space.
 
 Key things learned and implemented:
-- **Bootstrap 5**: Used for the main structure, including the responsive navbar, tables, and card components. It definitely speeds up development but requires checking the docs frequently for class names.
-- **Custom CSS Override**: Created a `main.css` file to define custom variables (colors) and specific styles that Bootstrap didn't cover, like the prompt box and custom hover effects on the GIF images.
-- **Flexbox**: Used `d-flex flex-column min-vh-100` on the body to create a sticky footer that stays at the bottom even when content is short.
-- **CSS Grid**: Used `display: grid` for the GIF results area to create a responsive gallery that auto-fills columns based on screen width (`repeat(auto-fill, minmax(200px, 1fr))`).
-- **Google Fonts**: Integrated the 'Lexend' font to give the app a more modern, clean look.
-- **Positioning**: This is rough, this doc was very helpful in my efforts to move my title to the center of the navbar: https://getbootstrap.com/docs/5.3/utilities/position/
+- **Bootstrap 5**: Used for the main structure. I particularly liked the card component for the different sections of the game.
+- **Custom CSS**: I wrote some custom CSS in `main.css` to handle things that Bootstrap didn't cover perfectly, or where I wanted a specific look (like the dark theme).
+- **Flexbox**: Used extensively! `d-flex`, `flex-column`, `flex-grow-1`, `align-items-center`, `justify-content-center`. It's really powerful for layout.
+- **Grid**: I used CSS Grid for the GIF results. `grid-template-columns: repeat(auto-fill, minmax(200px, 1fr))` is a magic line of code that makes responsive grids super easy.
+- **100vh Layout**: I struggled to get the app to fit exactly on the screen without a scrollbar. I learned that `height: 100vh` on the body and `display: flex` with `flex-direction: column` is the way to go.
 
 ```css
-/* Example of using CSS Variables and Grid */
-:root {
-    --primary-color: #007bff;
-    --background-color: #f8f9fa;
-}
-
-.gif-results {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1rem;
+/* My struggle with the grid layout */
+.gif-grid {
+    display: grid; 
+    /* This took me a while to figure out */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+    gap: 1rem; 
+    align-content: start; /* Keeps items at the top */
+    flex-grow: 1;
+    overflow: auto; /* This allows just the grid to scroll! */
+    padding: 0.5rem;
 }
 ```
 ```

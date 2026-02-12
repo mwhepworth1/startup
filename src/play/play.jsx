@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Form, InputGroup, Badge } from 'react-bootstrap';
 import './play.css';
 
-function Play() {
+export default function Play() {
   const [searchQuery, setSearchQuery] = useState('');
   const [gifGrid, setGifGrid] = useState([]);
   const [selectedGif, setSelectedGif] = useState(null);
@@ -130,4 +130,3 @@ function Play() {
   );
 }
 
-export default Play;

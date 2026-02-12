@@ -1,13 +1,14 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
-import Login from './components/login/login';
-import Play from './components/play/play';
-import Scores from './components/scores/scores';
-import About from './components/about/about';
-import NotFound from './components/notfound/notfound';
+import Login from './login/login';
+import Play from './play/play';
+import Scores from './scores/scores';
+import About from './about/about';
+import NotFound from './notfound/notfound';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './app.css';
 
-function App() {
+export default function App() {
   return (
     <BrowserRouter>
       <div className="d-flex flex-column min-vh-100">
@@ -20,10 +21,10 @@ function App() {
               <NavLink className="navbar-brand position-absolute top-50 start-50 translate-middle" to="/">Top Comment</NavLink>
               <div className="collapse navbar-collapse" id="navbarNav">
                 <ul className="navbar-nav">
-                  <li className="nav-item"><NavLink className="nav-link" to="/">Home</NavLink></li>
-                  <li className="nav-item"><NavLink className="nav-link" to="/play">Play</NavLink></li>
-                  <li className="nav-item"><NavLink className="nav-link" to="/scores">Scores</NavLink></li>
-                  <li className="nav-item"><NavLink className="nav-link" to="/about">About</NavLink></li>
+                  <li className="nav-item"><NavLink className="nav-link" to="">Home</NavLink></li>
+                  <li className="nav-item"><NavLink className="nav-link" to="play">Play</NavLink></li>
+                  <li className="nav-item"><NavLink className="nav-link" to="scores">Scores</NavLink></li>
+                  <li className="nav-item"><NavLink className="nav-link" to="about">About</NavLink></li>
                 </ul>
               </div>
               <span className="navbar-game-room">Room Code: <strong>N/A</strong></span>
@@ -32,7 +33,7 @@ function App() {
         </header>
 
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/" element={<Login />} exact />
           <Route path="/play" element={<Play />} />
           <Route path="/scores" element={<Scores />} />
           <Route path="/about" element={<About />} />
@@ -49,5 +50,3 @@ function App() {
     </BrowserRouter>
   );
 }
-
-export default App;

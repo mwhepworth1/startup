@@ -1,0 +1,10 @@
+.table-custom {
+    border-radius: 8px;
+    overflow: hidden;
+    --bs-table-bg: var(--secondary-background-color) !important;
+    --bs-table-color: var(--text-color) !important;
+}
+
+.table-custom tbody tr:nth-child(even) {
+    background-color: var(--secondary-background-color);
+}

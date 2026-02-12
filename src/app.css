@@ -20,42 +20,40 @@ body {
     overflow: hidden;
 }
 
+
 main {
     flex: 1;
     padding: 1rem;
     overflow: hidden;
 }
-
 .btn-primary {
     background-color: var(--primary-color);
     color: var(--text-color);
     border: none;
 }
-
 .btn-primary:hover {
     background-color: var(--primary-color-hover);
 }
 
+/* Navbar */
 .navbar {
     background-color: var(--secondary-background-color);
     border-bottom: 1px solid var(--border-color);
     color: var(--text-color) !important;
 }
-
 .navbar .navbar-brand {
     color: var(--text-color) !important;
     font-size: 1.75rem;
     font-weight: bold;
 }
-
 .navbar .navbar-nav .nav-link {
     color: var(--link-color) !important;
 }
-
 .navbar .navbar-nav .nav-link:hover {
     color: var(--primary-color) !important;
 }
 
+/* Footer */
 footer {
     background-color: var(--secondary-background-color);
     color: var(--text-color);
@@ -63,17 +61,14 @@ footer {
     text-align: center;
     border-top: 1px solid var(--border-color);
 }
-
 footer a {
     color: var(--link-color);
     text-decoration: none; 
 }
-
 footer a:hover {
     color: var(--primary-color);
     text-decoration: underline;
 }
-
 footer .container {
     display: flex;
     justify-content: center;
@@ -81,12 +76,191 @@ footer .container {
     gap: 2rem;
 }
 
+/* index.html */
+.login {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
 input, input:hover, input:focus {
     background-color: var(--input-background);
     color: var(--text-color);
     border: 1px solid var(--border-color);
 }
-
-input::placeholder {
+input::placeholder { /* this is the color of the text in the form */
     color: var(--text-color) !important;
+}
+
+
+/* about.html */
+.about-card {
+    background-color: var(--secondary-background-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+.content-scrollable {
+    overflow-y: auto !important;
+}
+
+.blockquote-footer {
+    color: var(--link-color);
+}
+
+/* play.html */
+.game-area {
+    background: var(--background-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.prompt-box {
+    background-color: var(--secondary-background-color);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    border-left: 5px solid var(--primary-color);
+}
+
+.gif-results {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.gif-results img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    transition: transform 0.2s;
+}
+
+.gif-results img:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+.game-card {
+    background-color: var(--secondary-background-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+.game-card .muted {
+    color: var(--link-color);
+}
+
+.prompt-card {
+    border-bottom: 5px solid var(--primary-color) !important;
+}
+
+.live-events-card {
+    max-height: 25%;
+}
+
+.player-hand-container {
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+
+.gif-search-container {
+    max-width: 900px;
+    width: 75%;
+    margin: 0 auto;
+}
+
+.gif-grid {
+    column-count: 2; 
+    column-gap: 1rem;
+    height: 400px;          
+    overflow-y: auto;       
+    overflow-x: hidden;     
+    padding: 0.5rem;
+    padding-right: 1rem;    
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .gif-grid {
+        column-count: 3;
+    }
+}
+@media (min-width: 1200px) {
+    .gif-grid {
+        column-count: 4; 
+    }
+}
+
+.input-group .form-control {
+    background-color: var(--input-background);
+    border-color: var(--border-color);
+    color: white;
+}
+
+.input-group .form-control:focus {
+    background-color: #444;
+    border-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 0 0 0.25rem rgba(151, 2, 180, 0.25);
+}
+
+.gif-item {
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: inline-block; 
+    width: 100%;           
+    margin-bottom: 1rem;   
+    break-inside: avoid;   
+}
+
+.gif-item:hover {
+    transform: scale(1.02); 
+    z-index: 10;
+}
+
+
+.gif-item img {
+    width: 100%;
+    height: auto; 
+    object-fit: contain; 
+    border-radius: 8px; 
+}
+
+.list-group-item {
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+
+.submissions-card {
+    height: fit-content;
+    max-height: none;
+}
+.lower-game {
+    margin-top: 5vh;
+}
+.gif-container {
+    margin-left: 10vw;
+}
+
+/* scores.html */
+.table-custom {
+    border-radius: 8px;
+    overflow: hidden;
+    --bs-table-bg: var(--secondary-background-color) !important;
+    --bs-table-color: var(--text-color) !important;
+}
+
+
+.table-custom tbody tr:nth-child(even) {
+    background-color: var(--secondary-background-color);
 }

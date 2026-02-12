@@ -2,7 +2,7 @@ import React from 'react';
 import { Table, Badge } from 'react-bootstrap';
 import './scores.css';
 
-function Scores() {
+export default function Scores() {
   return (
     <main className="container">
       <h2 className="mb-4">Global Leaderboard</h2>
@@ -84,5 +84,3 @@ function Scores() {
     </main>
   );
 }
-
-export default Scores;

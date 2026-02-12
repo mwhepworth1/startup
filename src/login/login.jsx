@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
 import './login.css';
 
-function Login() {
+export default function Login() {
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -38,4 +38,3 @@ function Login() {
   );
 }
 
-export default Login;

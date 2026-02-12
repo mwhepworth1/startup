@@ -1,7 +1,7 @@
 import React from 'react';
 import './about.css';
 
-function About() {
+export default function About() {
   return (
     <main className="container content-scrollable">
       <div className="p-5 mb-4 about-card rounded-3 shadow-sm">
@@ -35,5 +35,3 @@ function About() {
     </main>
   );
 }
-
-export default About;

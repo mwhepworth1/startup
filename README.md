@@ -113,9 +113,9 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Bundled using Vite** - I did not complete this part of the deliverable.
-- [ ] **Components** - I did not complete this part of the deliverable.
-- [ ] **Router** - I did not complete this part of the deliverable.
+- [x] **Bundled using Vite** - I set up Vite as the build tool with the React plugin and configured it to bundle the application properly.
+- [x] **Components** - I converted all four main views (Login, Play, Scores, About) into functional React components, each with their own folder containing a .jsx file and a .css file. I also created a NotFound component for the 404 route.
+- [x] **Router** - I implemented React Router with a BrowserRouter in the main App component. The header navigation uses NavLink components for active link styling, and I defined Routes for `/` (Login), `/play`, `/scores`, `/about`, and `*` (NotFound).
 
 ## 🚀 React part 2: Reactivity deliverable
 

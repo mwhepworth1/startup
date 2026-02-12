@@ -1,0 +1,13 @@
+.about-card {
+    background-color: var(--secondary-background-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+.content-scrollable {
+    overflow-y: auto !important;
+}
+
+.blockquote-footer {
+    color: var(--link-color);
+}

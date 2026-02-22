@@ -67,27 +67,65 @@ Setting up Vite and React was pretty simple. I had a bit of trouble because of c
 
 This was a lot of fun to see it all come together. I had to keep remembering to use React state instead of just manipulating the DOM directly.
 
-Handling the toggling of the checkboxes was particularly interesting.
+Key learnings from this phase:
 
-```jsx
-<div className="input-group sound-button-container">
-  {calmSoundTypes.map((sound, index) => (
-    <div key={index} className="form-check form-switch">
-      <input
-        className="form-check-input"
-        type="checkbox"
-        value={sound}
-        id={sound}
-        onChange={() => togglePlay(sound)}
-        checked={selectedSounds.includes(sound)}
-      ></input>
-      <label className="form-check-label" htmlFor={sound}>
-        {sound}
-      </label>
-    </div>
-  ))}
-</div>
-```
+### useState Hook
+I used `useState` extensively throughout the application:
+- **Login component**: Managing email, password, username, and form mode (login vs create account)
+- **Play component**: Managing game state, room codes, timers, player lists, GIF searches, submissions, and votes
+- **Scores component**: Managing leaderboard data
+- **About component**: Managing the featured GIF state
+
+### useEffect Hook
+The `useEffect` hook was crucial for:
+- **Authentication checks**: Checking if user is logged in on mount and redirecting appropriately
+- **Timer countdowns**: Implementing the game timer that counts down during submission and voting phases
+- **WebSocket simulation**: Using `setInterval` inside `useEffect` to simulate real-time events (player joins, submissions, votes)
+- **Data fetching**: Loading trending GIFs from Giphy API for the About page
+- **Real-time score updates**: Simulating live leaderboard changes
+
+### Component Lifecycle
+Understanding when effects run was key:
+- Empty dependency array `[]` means run once on mount
+- Dependency arrays like `[gamePhase, timer]` means run when those values change
+- Cleanup functions (returning a function from `useEffect`) are critical for clearing intervals
+
+### State Management Patterns
+I learned several important patterns:
+- **Derived state**: Calculating values from existing state rather than storing redundant state
+- **State updates based on previous state**: Using the functional form `setState(prev => ...)` when new state depends on old state
+- **localStorage integration**: Syncing React state with localStorage for persistence
+
+### Complex State Transitions
+The game flow required managing complex state transitions:
+1. Lobby → Create/Join Room
+2. Room → Game Start
+3. Submission Phase → Auto-transition after timer
+4. Voting Phase → Auto-transition after timer
+5. Results → Auto-start next round
+
+Each transition required careful coordination of multiple state variables.
+
+### Mocking Backend Functionality
+As instructed, I mocked out features that will be implemented later:
+- **localStorage for authentication**: Storing user credentials and current user session
+- **setInterval for WebSocket simulation**: Creating fake real-time events every 5 seconds
+- **Hard-coded responses**: Mock player data, prompts pool, and auto-submissions
+- **Timer-based phase transitions**: Simulating server-controlled game flow
+
+### Performance Considerations
+I learned about potential performance issues:
+- Polling localStorage every 500ms in App.jsx to update UI (necessary evil for this mock implementation)
+- Cleanup of intervals in `useEffect` return functions to prevent memory leaks
+- Being careful with state updates in intervals to avoid infinite loops
+
+### React Router Integration
+Managing navigation with state:
+- Redirecting to login if not authenticated
+- Preserving room state across page refreshes with localStorage
+- Using `useNavigate` hook for programmatic navigation
+
+This deliverable really brought the application to life! The combination of React hooks, state management, and mocking made it feel like a real multiplayer game even though everything is client-side.
 
 ## Startup HTML Structure
 

@@ -121,8 +121,11 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **All functionality implemented or mocked out** - I did not complete this part of the deliverable.
-- [ ] **Hooks** - I did not complete this part of the deliverable.
+- [x] **All functionality implemented or mocked out** - I implemented complete game functionality with React state management. All features work end-to-end including user authentication (mocked with localStorage), room creation/joining, GIF search with Giphy API, game phases (lobby, submission, voting, results), timer countdowns, and live events simulation.
+- [x] **Hooks** - I extensively used React hooks throughout the application:
+  - **useState**: Used in every component to manage local state (login forms, game state, timers, player lists, GIF searches, votes, submissions, leaderboard data, etc.)
+  - **useEffect**: Used for authentication checks, timer countdowns, WebSocket simulation with setInterval (live events every 5 seconds), Giphy API calls, score updates, and localStorage synchronization
+  - **useNavigate**: Used for programmatic navigation after login and logout
 
 ## 🚀 Service deliverable
 

@@ -287,7 +287,7 @@ export default function Play() {
         <div className="row justify-content-center w-100">
           <div className="col-md-6">
             <h2 className="mb-4">Game Lobby</h2>
-            <div className="card p-4 shadow-sm">
+            <div className="card p-4 shadow-sm game-card">
               <div className="d-grid gap-3">
                 <Button 
                   variant="primary" 
@@ -325,7 +325,7 @@ export default function Play() {
         <div className="row justify-content-center w-100">
           <div className="col-md-6">
             <h2 className="mb-4">Room: {roomCode}</h2>
-            <div className="card p-4 shadow-sm">
+            <div className="card p-4 shadow-sm game-card">
               <h4 className="mb-3">Players in Room</h4>
               <ul className="list-group mb-4">
                 {players.map((player, idx) => (

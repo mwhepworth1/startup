@@ -1,5 +1,23 @@
 .login {
-    background-color: var(--background-color);
+    background-color: var(--secondary-background-color);
     color: var(--text-color);
     border: 1px solid var(--border-color);
+}
+
+.login .form-control {
+    background-color: var(--input-background);
+    border-color: var(--border-color);
+    color: var(--text-color);
+}
+
+.login .form-control::placeholder {
+    color: var(--text-color);
+    opacity: 0.6;
+}
+
+.login .form-control:focus {
+    background-color: #444;
+    border-color: var(--primary-color);
+    color: var(--text-color);
+    box-shadow: 0 0 0 0.25rem rgba(151, 2, 180, 0.25);
 }

@@ -56,6 +56,41 @@ apiRouter.post('/auth/login', async (req, res) => {
   res.send({ email: user.email, username: user.username });
 });
 
+// Logout
+apiRouter.delete('/auth/logout', (req, res) => {
+  const token = req.cookies.token;
+  if (token) {
+    delete tokens[token];
+  }
+  res.clearCookie('token');
+  res.send({ msg: 'Logged out' });
+});
+
+// Check if logged in
+apiRouter.get('/auth/me', (req, res) => {
+  const token = req.cookies.token;
+  const email = tokens[token];
+  if (!email) {
+    return res.status(401).send({ msg: 'Not authenticated' });
+  }
+  const user = users.find(u => u.email === email);
+  if (!user) {
+    return res.status(401).send({ msg: 'Not authenticated' });
+  }
+  res.send({ email: user.email, username: user.username });
+});
+
+// Auth middleware for protected routes
+function authMiddleware(req, res, next) {
+  const token = req.cookies.token;
+  const email = tokens[token];
+  if (!email) {
+    return res.status(401).send({ msg: 'Unauthorized' });
+  }
+  req.userEmail = email;
+  next();
+}
+
 // Fallback to frontend for non-API routes
 app.use((_req, res) => {
   res.sendFile('index.html', { root: 'public' });

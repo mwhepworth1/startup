@@ -91,6 +91,38 @@ function authMiddleware(req, res, next) {
   next();
 }
 
+// Get scores (leaderboard)
+apiRouter.get('/scores', (_req, res) => {
+  const leaderboard = users.map(u => ({
+    username: u.username,
+    email: u.email,
+    score: u.score,
+    wins: u.wins,
+    streak: u.streak,
+  }));
+  leaderboard.sort((a, b) => b.score - a.score);
+  res.send(leaderboard);
+});
+
+// Submit a score update (protected)
+apiRouter.post('/scores', authMiddleware, (req, res) => {
+  const { score, won } = req.body;
+  const user = users.find(u => u.email === req.userEmail);
+  if (!user) {
+    return res.status(404).send({ msg: 'User not found' });
+  }
+
+  user.score += score || 0;
+  if (won) {
+    user.wins += 1;
+    user.streak += 1;
+  } else {
+    user.streak = 0;
+  }
+
+  res.send({ score: user.score, wins: user.wins, streak: user.streak });
+});
+
 // Fallback to frontend for non-API routes
 app.use((_req, res) => {
   res.sendFile('index.html', { root: 'public' });

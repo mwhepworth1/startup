@@ -13,33 +13,39 @@ export default function Login() {
 
   // Check if user is already logged in
   useEffect(() => {
-    const currentUser = localStorage.getItem('currentUser');
-    if (currentUser) {
-      navigate('/play');
-    }
+    fetch('/api/auth/me')
+      .then(res => {
+        if (res.ok) return res.json();
+        throw new Error('Not logged in');
+      })
+      .then(user => {
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        navigate('/play');
+      })
+      .catch(() => {});
   }, [navigate]);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
 
-    // Get stored users from localStorage
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const user = users.find(u => u.email === email && u.password === password);
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
 
-    if (user) {
-      // Store current user
-      localStorage.setItem('currentUser', JSON.stringify({
-        email: user.email,
-        username: user.username
-      }));
+    if (res.ok) {
+      const user = await res.json();
+      localStorage.setItem('currentUser', JSON.stringify(user));
       navigate('/play');
     } else {
-      setError('Invalid email or password');
+      const body = await res.json();
+      setError(body.msg || 'Invalid email or password');
     }
   };
 
-  const handleCreateAccount = (e) => {
+  const handleCreateAccount = async (e) => {
     e.preventDefault();
     setError('');
 
@@ -48,35 +54,20 @@ export default function Login() {
       return;
     }
 
-    // Get stored users from localStorage
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    
-    // Check if email already exists
-    if (users.find(u => u.email === email)) {
-      setError('An account with this email already exists');
-      return;
+    const res = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password, username }),
+    });
+
+    if (res.ok) {
+      const user = await res.json();
+      localStorage.setItem('currentUser', JSON.stringify(user));
+      navigate('/play');
+    } else {
+      const body = await res.json();
+      setError(body.msg || 'Failed to create account');
     }
-
-    // Create new user
-    const newUser = {
-      email,
-      password,
-      username,
-      score: 0,
-      wins: 0,
-      streak: 0
-    };
-
-    users.push(newUser);
-    localStorage.setItem('users', JSON.stringify(users));
-
-    // Log in the new user
-    localStorage.setItem('currentUser', JSON.stringify({
-      email: newUser.email,
-      username: newUser.username
-    }));
-
-    navigate('/play');
   };
 
   return (
@@ -90,48 +81,48 @@ export default function Login() {
               {isCreatingAccount && (
                 <Form.Group className="mb-3 text-start">
                   <Form.Label htmlFor="username">Username:</Form.Label>
-                  <Form.Control 
-                    type="text" 
-                    id="username" 
-                    name="username" 
-                    placeholder="username" 
+                  <Form.Control
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    required 
+                    required
                   />
                 </Form.Group>
               )}
               <Form.Group className="mb-3 text-start">
                 <Form.Label htmlFor="email">Email:</Form.Label>
-                <Form.Control 
-                  type="email" 
-                  id="email" 
-                  name="email" 
-                  placeholder="your@email.com" 
+                <Form.Control
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="your@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  required 
+                  required
                 />
               </Form.Group>
               <Form.Group className="mb-3 text-start">
                 <Form.Label htmlFor="password">Password:</Form.Label>
-                <Form.Control 
-                  type="password" 
-                  id="password" 
-                  name="password" 
-                  placeholder="password" 
+                <Form.Control
+                  type="password"
+                  id="password"
+                  name="password"
+                  placeholder="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  required 
+                  required
                 />
               </Form.Group>
               <div className="d-grid gap-2">
                 {isCreatingAccount ? (
                   <>
                     <Button type="submit" variant="primary">Create Account</Button>
-                    <Button 
-                      type="button" 
-                      variant="secondary" 
+                    <Button
+                      type="button"
+                      variant="secondary"
                       onClick={() => {
                         setIsCreatingAccount(false);
                         setError('');
@@ -143,8 +134,8 @@ export default function Login() {
                 ) : (
                   <>
                     <Button type="submit" variant="primary">Login</Button>
-                    <Button 
-                      type="button" 
+                    <Button
+                      type="button"
                       variant="secondary"
                       onClick={() => {
                         setIsCreatingAccount(true);
@@ -163,4 +154,3 @@ export default function Login() {
     </main>
   );
 }
-

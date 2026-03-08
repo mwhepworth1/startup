@@ -14,11 +14,20 @@ function AppContent() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check for current user
-    const checkUser = () => {
-      const user = JSON.parse(localStorage.getItem('currentUser') || 'null');
-      setCurrentUser(user);
-    };
+    // Check auth status from backend
+    fetch('/api/auth/me')
+      .then(res => {
+        if (res.ok) return res.json();
+        throw new Error('Not logged in');
+      })
+      .then(user => {
+        setCurrentUser(user);
+        localStorage.setItem('currentUser', JSON.stringify(user));
+      })
+      .catch(() => {
+        setCurrentUser(null);
+        localStorage.removeItem('currentUser');
+      });
 
     // Check for current room
     const checkRoom = () => {
@@ -26,19 +35,17 @@ function AppContent() {
       setRoomCode(room || 'N/A');
     };
 
-    checkUser();
     checkRoom();
 
-    // Listen for storage changes
     const interval = setInterval(() => {
-      checkUser();
       checkRoom();
     }, 500);
 
     return () => clearInterval(interval);
   }, []);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await fetch('/api/auth/logout', { method: 'DELETE' });
     localStorage.removeItem('currentUser');
     localStorage.removeItem('currentRoom');
     setCurrentUser(null);

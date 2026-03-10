@@ -269,8 +269,23 @@ export default function Play() {
       ...sub,
       votes: (votes[idx] || 0) + Math.floor(Math.random() * 3)
     }));
-    
+
     setSubmissions(updatedSubmissions);
+
+    // Find if the current user won
+    const mySubmission = updatedSubmissions.find(s => s.player === currentUser?.username);
+    if (mySubmission) {
+      const maxVotes = Math.max(...updatedSubmissions.map(s => s.votes));
+      const won = mySubmission.votes === maxVotes;
+      const scoreGain = mySubmission.votes * 100;
+
+      // Submit results to backend
+      fetch('/api/scores', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ score: scoreGain, won }),
+      }).catch(err => console.error('Failed to submit score:', err));
+    }
   };
 
   const leaveRoom = () => {

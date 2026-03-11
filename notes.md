@@ -127,6 +127,18 @@ Managing navigation with state:
 
 This deliverable really brought the application to life! The combination of React hooks, state management, and mocking made it feel like a real multiplayer game even though everything is client-side.
 
+## Service Deliverable
+
+Setting up the backend service was pretty straightforward once I understood the project structure. The key thing is having two separate `package.json` files - one in the root for the frontend (React/Vite) and one in `service/` for the backend (Express).
+
+Things I learned:
+- **Vite proxy config**: Adding a `vite.config.js` with a proxy for `/api` routes makes development way easier. Frontend fetch calls to `/api/whatever` get forwarded to `localhost:4000` automatically.
+- **bcrypt for passwords**: Using `bcryptjs` to hash passwords with `bcrypt.hash(password, 10)` and comparing with `bcrypt.compare()`. Never store plain text passwords.
+- **Cookie-based auth**: Using `uuid` to generate auth tokens, storing them in httpOnly cookies with `sameSite: 'strict'`. The backend keeps a map of token -> email to look up who's logged in.
+- **Auth middleware**: Created a reusable middleware function that checks the cookie token before allowing access to protected endpoints like `POST /api/scores`.
+- **In-memory storage**: For now everything is stored in arrays/objects in memory. This means data resets when the server restarts, but it's fine for this deliverable. MongoDB comes next.
+- **deployService.sh**: The new deploy script builds the React frontend, copies it to `build/public`, copies the backend service files, then deploys everything to the server and restarts with PM2.
+
 ## Startup HTML Structure
 
 I have created the initial HTML structure for the Top Comment application. This includes:

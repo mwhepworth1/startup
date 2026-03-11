@@ -131,12 +131,12 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Node.js/Express HTTP service** - I did not complete this part of the deliverable.
-- [ ] **Static middleware for frontend** - I did not complete this part of the deliverable.
-- [ ] **Calls to third party endpoints** - I did not complete this part of the deliverable.
-- [ ] **Backend service endpoints** - I did not complete this part of the deliverable.
-- [ ] **Frontend calls service endpoints** - I did not complete this part of the deliverable.
-- [ ] **Supports registration, login, logout, and restricted endpoint** - I did not complete this part of the deliverable.
+- [x] **Node.js/Express HTTP service** - Created an Express server in `service/index.js` running on port 4000. It handles JSON parsing, cookie parsing, and serves the frontend in production via static middleware.
+- [x] **Static middleware for frontend** - Added `express.static('public')` to serve the built React frontend from the `public` directory when deployed.
+- [x] **Calls to third party endpoints** - The frontend calls the Giphy API in the Play component for GIF search and in the About component for the daily trending GIF. This was already in place from the React deliverable.
+- [x] **Backend service endpoints** - Created `GET /api/scores` and `POST /api/scores` endpoints for the leaderboard. Scores are stored in memory and sorted by score descending.
+- [x] **Frontend calls service endpoints** - The Scores page fetches from `/api/scores`, and the Play page posts score updates after each round via `POST /api/scores`. Login and registration also call the backend auth endpoints.
+- [x] **Supports registration, login, logout, and restricted endpoint** - Implemented `POST /api/auth/register`, `POST /api/auth/login`, `DELETE /api/auth/logout`, and `GET /api/auth/me`. The `POST /api/scores` endpoint is protected by auth middleware that checks the cookie token. Passwords are hashed with bcrypt.
 
 ## 🚀 DB deliverable
 

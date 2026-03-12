@@ -142,8 +142,8 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Stores data in MongoDB** - I did not complete this part of the deliverable.
-- [ ] **Stores credentials in MongoDB** - I did not complete this part of the deliverable.
+- [x] **Stores data in MongoDB** - Leaderboard scores and per-user stats (score, wins, streak) are stored in a `users` collection in MongoDB Atlas. The `getLeaderboard()` function fetches all users sorted by score descending, and `updateUserScore()` atomically updates a user's stats after each game round using `$inc` and `$set` operators. A separate `tokens` collection handles auth session tokens.
+- [x] **Stores credentials in MongoDB** - User registration hashes passwords with bcrypt before storing them in the `users` collection via `createUser()`. Login looks up the user by email with `getUserByEmail()` and compares the submitted password against the stored hash. Credentials are never stored or transmitted in plain text.
 
 ## 🚀 WebSocket deliverable
 

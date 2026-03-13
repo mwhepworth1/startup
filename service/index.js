@@ -2,6 +2,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcryptjs');
 const { v4: uuid } = require('uuid');
+const db = require('./database.js');
 
 const app = express();
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
@@ -11,10 +12,6 @@ app.use(cookieParser());
 
 // Serve frontend static files in production
 app.use(express.static('public'));
-
-// In-memory data stores
-let users = [];
-let tokens = {}; // token -> email
 
 // API router
 const apiRouter = express.Router();
@@ -27,16 +24,17 @@ apiRouter.post('/auth/register', async (req, res) => {
     return res.status(400).send({ msg: 'Missing fields' });
   }
 
-  if (users.find(u => u.email === email)) {
+  const existing = await db.getUserByEmail(email);
+  if (existing) {
     return res.status(409).send({ msg: 'User already exists' });
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
   const user = { email, password: hashedPassword, username, score: 0, wins: 0, streak: 0 };
-  users.push(user);
+  await db.createUser(user);
 
   const token = uuid();
-  tokens[token] = user.email;
+  await db.setToken(token, user.email);
   res.cookie('token', token, { httpOnly: true, sameSite: 'strict' });
   res.send({ email: user.email, username: user.username });
 });
@@ -44,36 +42,36 @@ apiRouter.post('/auth/register', async (req, res) => {
 // Login
 apiRouter.post('/auth/login', async (req, res) => {
   const { email, password } = req.body;
-  const user = users.find(u => u.email === email);
+  const user = await db.getUserByEmail(email);
 
   if (!user || !(await bcrypt.compare(password, user.password))) {
     return res.status(401).send({ msg: 'Invalid credentials' });
   }
 
   const token = uuid();
-  tokens[token] = user.email;
+  await db.setToken(token, user.email);
   res.cookie('token', token, { httpOnly: true, sameSite: 'strict' });
   res.send({ email: user.email, username: user.username });
 });
 
 // Logout
-apiRouter.delete('/auth/logout', (req, res) => {
+apiRouter.delete('/auth/logout', async (req, res) => {
   const token = req.cookies.token;
   if (token) {
-    delete tokens[token];
+    await db.deleteToken(token);
   }
   res.clearCookie('token');
   res.send({ msg: 'Logged out' });
 });
 
 // Check if logged in
-apiRouter.get('/auth/me', (req, res) => {
+apiRouter.get('/auth/me', async (req, res) => {
   const token = req.cookies.token;
-  const email = tokens[token];
+  const email = await db.getEmailByToken(token);
   if (!email) {
     return res.status(401).send({ msg: 'Not authenticated' });
   }
-  const user = users.find(u => u.email === email);
+  const user = await db.getUserByEmail(email);
   if (!user) {
     return res.status(401).send({ msg: 'Not authenticated' });
   }
@@ -81,9 +79,9 @@ apiRouter.get('/auth/me', (req, res) => {
 });
 
 // Auth middleware for protected routes
-function authMiddleware(req, res, next) {
+async function authMiddleware(req, res, next) {
   const token = req.cookies.token;
-  const email = tokens[token];
+  const email = await db.getEmailByToken(token);
   if (!email) {
     return res.status(401).send({ msg: 'Unauthorized' });
   }
@@ -92,34 +90,18 @@ function authMiddleware(req, res, next) {
 }
 
 // Get scores (leaderboard)
-apiRouter.get('/scores', (_req, res) => {
-  const leaderboard = users.map(u => ({
-    username: u.username,
-    email: u.email,
-    score: u.score,
-    wins: u.wins,
-    streak: u.streak,
-  }));
-  leaderboard.sort((a, b) => b.score - a.score);
+apiRouter.get('/scores', async (_req, res) => {
+  const leaderboard = await db.getLeaderboard();
   res.send(leaderboard);
 });
 
 // Submit a score update (protected)
-apiRouter.post('/scores', authMiddleware, (req, res) => {
+apiRouter.post('/scores', authMiddleware, async (req, res) => {
   const { score, won } = req.body;
-  const user = users.find(u => u.email === req.userEmail);
+  const user = await db.updateUserScore(req.userEmail, score, won);
   if (!user) {
     return res.status(404).send({ msg: 'User not found' });
   }
-
-  user.score += score || 0;
-  if (won) {
-    user.wins += 1;
-    user.streak += 1;
-  } else {
-    user.streak = 0;
-  }
-
   res.send({ score: user.score, wins: user.wins, streak: user.streak });
 });
 

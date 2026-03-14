@@ -139,6 +139,27 @@ Things I learned:
 - **In-memory storage**: For now everything is stored in arrays/objects in memory. This means data resets when the server restarts, but it's fine for this deliverable. MongoDB comes next.
 - **deployService.sh**: The new deploy script builds the React frontend, copies it to `build/public`, copies the backend service files, then deploys everything to the server and restarts with PM2.
 
+## Database Deliverable (MongoDB)
+
+This was a big step up from the in-memory storage. Now data actually persists between server restarts which is huge.
+
+Things I learned:
+- **MongoDB Atlas**: Set up a free cluster on MongoDB Atlas. The connection string uses `mongodb+srv://` protocol which handles DNS seedlist for the replica set automatically.
+- **MongoClient**: Created a `database.js` module that exports helper functions. The `MongoClient` connects once on startup and reuses the connection for all queries.
+- **Collections**: Using two collections - `users` for account data and scores, and `tokens` for auth session tokens. Each collection maps to what was previously an in-memory array/object.
+- **CRUD operations**:
+  - `insertOne()` for creating users
+  - `findOne()` for looking up users by email or tokens
+  - `findOneAndUpdate()` with `$inc` and `$set` operators for updating scores atomically
+  - `deleteOne()` for removing tokens on logout
+  - `find().sort().toArray()` for getting the leaderboard sorted by score
+- **Upsert**: Used `upsert: true` when setting tokens so that if a token document already exists it gets updated instead of duplicated.
+- **Projection**: Used `{ projection: { password: 0 } }` on the leaderboard query to make sure password hashes never get sent to the client.
+- **Async/await everywhere**: Every database call is async, so all the Express route handlers needed to become `async` functions. The auth middleware too.
+- **returnDocument: 'after'**: When using `findOneAndUpdate`, you need this option to get back the updated document instead of the original.
+
+The hardest part was honestly just making sure I didn't forget to `await` any of the database calls. Missing an `await` means the route handler returns before the database operation finishes, which causes weird bugs.
+
 ## Startup HTML Structure
 
 I have created the initial HTML structure for the Top Comment application. This includes:

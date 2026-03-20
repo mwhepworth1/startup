@@ -30,7 +30,7 @@ apiRouter.post('/auth/register', async (req, res) => {
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  const user = { email, password: hashedPassword, username, score: 0, wins: 0, streak: 0 };
+  const user = { email, password: hashedPassword, username, score: 0, wins: 0, streak: 0, gamesPlayed: 0, createdAt: new Date() };
   await db.createUser(user);
 
   const token = uuid();

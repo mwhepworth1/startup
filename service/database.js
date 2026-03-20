@@ -30,11 +30,13 @@ async function getUserByEmail(email) {
 }
 
 async function updateUserScore(email, score, won) {
-  const update = { $inc: { score: score || 0 } };
+  const incFields = { score: score || 0, gamesPlayed: 1 };
   if (won) {
-    update.$inc.wins = 1;
-    update.$inc.streak = 1;
-  } else {
+    incFields.wins = 1;
+    incFields.streak = 1;
+  }
+  const update = { $inc: incFields, $max: { bestRoundScore: score || 0 } };
+  if (!won) {
     update.$set = { streak: 0 };
   }
   return usersCollection.findOneAndUpdate({ email }, update, { returnDocument: 'after' });

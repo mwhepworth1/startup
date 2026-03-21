@@ -7,6 +7,7 @@ const db = client.db('startup');
 
 const usersCollection = db.collection('users');
 const tokensCollection = db.collection('tokens');
+const gameHistoryCollection = db.collection('gameHistory');
 
 // Test connection
 (async function testConnection() {
@@ -49,6 +50,15 @@ async function getLeaderboard() {
     .toArray();
 }
 
+// Game history functions
+async function addGameResult(result) {
+  return gameHistoryCollection.insertOne(result);
+}
+
+async function getRecentResults(limit = 10) {
+  return gameHistoryCollection.find({}).sort({ playedAt: -1 }).limit(limit).toArray();
+}
+
 // Token functions
 async function setToken(token, email) {
   await tokensCollection.updateOne(
@@ -72,6 +82,8 @@ module.exports = {
   getUserByEmail,
   updateUserScore,
   getLeaderboard,
+  addGameResult,
+  getRecentResults,
   setToken,
   getEmailByToken,
   deleteToken,

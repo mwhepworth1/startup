@@ -105,6 +105,22 @@ apiRouter.post('/scores', authMiddleware, async (req, res) => {
   res.send({ score: user.score, wins: user.wins, streak: user.streak });
 });
 
+// Record a round result (protected)
+apiRouter.post('/game/result', authMiddleware, async (req, res) => {
+  const { prompt, winner, scores } = req.body;
+  if (!prompt || !winner) {
+    return res.status(400).send({ msg: 'Missing prompt or winner' });
+  }
+  await db.addGameResult({ prompt, winner, scores: scores || [], playedAt: new Date(), recordedBy: req.userEmail });
+  res.status(201).send({ msg: 'Result recorded' });
+});
+
+// Get recent round results
+apiRouter.get('/game/results', async (_req, res) => {
+  const results = await db.getRecentResults(10);
+  res.send(results);
+});
+
 // Fallback to frontend for non-API routes
 app.use((_req, res) => {
   res.sendFile('index.html', { root: 'public' });

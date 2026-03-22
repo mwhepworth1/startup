@@ -105,6 +105,20 @@ apiRouter.post('/scores', authMiddleware, async (req, res) => {
   res.send({ score: user.score, wins: user.wins, streak: user.streak });
 });
 
+// Get list of already-used prompts
+apiRouter.get('/prompts/used', async (_req, res) => {
+  const prompts = await db.getUsedPrompts();
+  res.send(prompts);
+});
+
+// Mark a prompt as used (protected)
+apiRouter.post('/prompts/use', authMiddleware, async (req, res) => {
+  const { prompt } = req.body;
+  if (!prompt) return res.status(400).send({ msg: 'Missing prompt' });
+  await db.markPromptUsed(prompt);
+  res.status(201).send({ msg: 'Prompt recorded' });
+});
+
 // Record a round result (protected)
 apiRouter.post('/game/result', authMiddleware, async (req, res) => {
   const { prompt, winner, scores } = req.body;

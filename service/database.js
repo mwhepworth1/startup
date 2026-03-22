@@ -8,6 +8,7 @@ const db = client.db('startup');
 const usersCollection = db.collection('users');
 const tokensCollection = db.collection('tokens');
 const gameHistoryCollection = db.collection('gameHistory');
+const usedPromptsCollection = db.collection('usedPrompts');
 
 // Test connection
 (async function testConnection() {
@@ -59,6 +60,16 @@ async function getRecentResults(limit = 10) {
   return gameHistoryCollection.find({}).sort({ playedAt: -1 }).limit(limit).toArray();
 }
 
+// Used prompts functions
+async function markPromptUsed(prompt) {
+  await usedPromptsCollection.updateOne({ prompt }, { $set: { prompt, usedAt: new Date() } }, { upsert: true });
+}
+
+async function getUsedPrompts() {
+  const docs = await usedPromptsCollection.find({}).toArray();
+  return docs.map(d => d.prompt);
+}
+
 // Token functions
 async function setToken(token, email) {
   await tokensCollection.updateOne(
@@ -84,6 +95,8 @@ module.exports = {
   getLeaderboard,
   addGameResult,
   getRecentResults,
+  markPromptUsed,
+  getUsedPrompts,
   setToken,
   getEmailByToken,
   deleteToken,

@@ -105,6 +105,14 @@ apiRouter.post('/scores', authMiddleware, async (req, res) => {
   res.send({ score: user.score, wins: user.wins, streak: user.streak });
 });
 
+// Get full profile stats for logged-in user (protected)
+apiRouter.get('/profile', authMiddleware, async (req, res) => {
+  const user = await db.getUserByEmail(req.userEmail);
+  if (!user) return res.status(404).send({ msg: 'User not found' });
+  const { password, ...profile } = user;
+  res.send(profile);
+});
+
 // Get list of already-used prompts
 apiRouter.get('/prompts/used', async (_req, res) => {
   const prompts = await db.getUsedPrompts();

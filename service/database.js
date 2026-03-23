@@ -48,6 +48,7 @@ async function getLeaderboard() {
   return usersCollection
     .find({}, { projection: { password: 0 } })
     .sort({ score: -1 })
+    .limit(10)
     .toArray();
 }
 

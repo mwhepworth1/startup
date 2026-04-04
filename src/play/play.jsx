@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Form, InputGroup, Badge, Alert } from 'react-bootstrap';
+import { GameNotifier, GameEvent } from './gameNotifier';
 import './play.css';
 
 // Game prompts pool
@@ -17,32 +18,36 @@ const prompts = [
 
 export default function Play() {
   const navigate = useNavigate();
-  
+
   // User and room state
   const [currentUser, setCurrentUser] = useState(null);
   const [roomCode, setRoomCode] = useState('');
   const [inRoom, setInRoom] = useState(false);
-  const [isCreatingRoom, setIsCreatingRoom] = useState(false);
-  
+
   // Game state
   const [gamePhase, setGamePhase] = useState('lobby'); // lobby, submission, voting, results
   const [currentPrompt, setCurrentPrompt] = useState('');
   const [timer, setTimer] = useState(30);
-  
+
   // GIF search state
   const [searchQuery, setSearchQuery] = useState('');
   const [gifGrid, setGifGrid] = useState([]);
   const [selectedGif, setSelectedGif] = useState(null);
   const [hasSubmitted, setHasSubmitted] = useState(false);
-  
+
   // Players and submissions
   const [players, setPlayers] = useState([]);
   const [submissions, setSubmissions] = useState([]);
   const [votes, setVotes] = useState({});
   const [myVote, setMyVote] = useState(null);
-  
+
   // Live events
   const [liveEvents, setLiveEvents] = useState([]);
+
+  const addLiveEvent = useCallback((message) => {
+    const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    setLiveEvents(prev => [...prev.slice(-9), { time: now, message }]);
+  }, []);
 
   // Check authentication on mount
   useEffect(() => {
@@ -58,9 +63,84 @@ export default function Play() {
     if (savedRoom) {
       setRoomCode(savedRoom);
       setInRoom(true);
-      initializeGame();
+      setPlayers([{ username: user.username, isYou: true }]);
+      GameNotifier.joinRoom(user.username, savedRoom);
     }
   }, [navigate]);
+
+  // WebSocket event handler
+  useEffect(() => {
+    const handleEvent = (event) => {
+      const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      switch (event.type) {
+        case GameEvent.System:
+          setLiveEvents(prev => [...prev.slice(-9), { time: now, message: `System: ${event.value.msg}` }]);
+          break;
+
+        case GameEvent.Join:
+          setPlayers(prev => {
+            if (prev.find(p => p.username === event.from)) return prev;
+            return [...prev, { username: event.from, isYou: false }];
+          });
+          setLiveEvents(prev => [...prev.slice(-9), { time: now, message: `${event.from} joined the room` }]);
+          break;
+
+        case GameEvent.Leave:
+          setPlayers(prev => prev.filter(p => p.username !== event.from));
+          setLiveEvents(prev => [...prev.slice(-9), { time: now, message: `${event.from} left the room` }]);
+          break;
+
+        case 'playerList':
+          setPlayers(prev => {
+            const existing = prev.map(p => p.username);
+            const newPlayers = event.value.players
+              .filter(name => !existing.includes(name))
+              .map(name => ({ username: name, isYou: false }));
+            return [...prev, ...newPlayers];
+          });
+          break;
+
+        case GameEvent.Submit:
+          setSubmissions(prev => {
+            if (prev.find(s => s.player === event.from)) return prev;
+            return [...prev, { player: event.from, gifUrl: event.value.gifUrl, votes: 0 }];
+          });
+          setLiveEvents(prev => [...prev.slice(-9), { time: now, message: `${event.from} submitted a GIF` }]);
+          break;
+
+        case GameEvent.Vote:
+          setVotes(prev => ({
+            ...prev,
+            [event.value.index]: (prev[event.value.index] || 0) + 1
+          }));
+          setLiveEvents(prev => [...prev.slice(-9), { time: now, message: `${event.from} voted` }]);
+          break;
+
+        case GameEvent.GameStart:
+          setGamePhase('submission');
+          setCurrentPrompt(event.value.prompt);
+          setTimer(30);
+          setHasSubmitted(false);
+          setSelectedGif(null);
+          setSubmissions([]);
+          setVotes({});
+          setMyVote(null);
+          setLiveEvents(prev => [...prev.slice(-9), { time: now, message: `${event.from} started the round!` }]);
+          break;
+
+        case GameEvent.GameEnd:
+          setLiveEvents(prev => [...prev.slice(-9), { time: now, message: `Round ended! Winner: ${event.value.winner}` }]);
+          break;
+
+        default:
+          break;
+      }
+    };
+
+    GameNotifier.addHandler(handleEvent);
+    return () => GameNotifier.removeHandler(handleEvent);
+  }, []);
 
   // Timer countdown
   useEffect(() => {
@@ -78,75 +158,13 @@ export default function Play() {
     }
   }, [gamePhase, timer]);
 
-  // Simulate WebSocket events with setInterval
-  useEffect(() => {
-    if (!inRoom) return;
-
-    const eventInterval = setInterval(() => {
-      // Simulate random player events
-      const eventTypes = [
-        { type: 'join', username: `Player${Math.floor(Math.random() * 100)}` },
-        { type: 'submit', username: `Player${Math.floor(Math.random() * 100)}` },
-        { type: 'vote', username: `Player${Math.floor(Math.random() * 100)}` }
-      ];
-      
-      const randomEvent = eventTypes[Math.floor(Math.random() * eventTypes.length)];
-      const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      
-      let message = '';
-      if (randomEvent.type === 'join') {
-        message = `${randomEvent.username} joined the room`;
-      } else if (randomEvent.type === 'submit') {
-        message = `${randomEvent.username} submitted a GIF`;
-      } else {
-        message = `${randomEvent.username} voted`;
-      }
-
-      setLiveEvents(prev => [...prev.slice(-9), { time: now, message }]);
-    }, 5000); // New event every 5 seconds
-
-    return () => clearInterval(eventInterval);
-  }, [inRoom]);
-
-  // Auto-submit mock player submissions during submission phase
-  useEffect(() => {
-    if (gamePhase === 'submission' && timer === 25 && submissions.length === 0) {
-      // Create mock submissions from other players
-      const mockSubmissions = players.slice(1, 4).map(player => ({
-        player: player.username,
-        gifUrl: `https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy.gif?${Math.random()}`,
-        votes: 0
-      }));
-      setSubmissions(mockSubmissions);
-    }
-  }, [gamePhase, timer, players, submissions.length]);
-
-  const initializeGame = () => {
-    // Initialize mock players
-    const mockPlayers = [
-      { username: currentUser?.username || 'You', isYou: true },
-      { username: 'GifMaster', isYou: false },
-      { username: 'MemeLord99', isYou: false },
-      { username: 'ReactionKing', isYou: false }
-    ];
-    setPlayers(mockPlayers);
-
-    // Add initial events
-    const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    setLiveEvents([
-      { time: now, message: 'Room created!' },
-      { time: now, message: 'GifMaster joined' },
-      { time: now, message: 'MemeLord99 joined' },
-      { time: now, message: 'ReactionKing joined' }
-    ]);
-  };
-
   const createRoom = () => {
     const code = Math.random().toString(36).substring(2, 8).toUpperCase();
     setRoomCode(code);
     setInRoom(true);
     localStorage.setItem('currentRoom', code);
-    initializeGame();
+    setPlayers([{ username: currentUser.username, isYou: true }]);
+    GameNotifier.joinRoom(currentUser.username, code);
     addLiveEvent('Room created!');
   };
 
@@ -154,13 +172,15 @@ export default function Play() {
     if (!roomCode.trim()) return;
     setInRoom(true);
     localStorage.setItem('currentRoom', roomCode);
-    initializeGame();
+    setPlayers([{ username: currentUser.username, isYou: true }]);
+    GameNotifier.joinRoom(currentUser.username, roomCode);
     addLiveEvent(`Joined room ${roomCode}`);
   };
 
   const startGame = () => {
+    const prompt = prompts[Math.floor(Math.random() * prompts.length)];
     setGamePhase('submission');
-    setCurrentPrompt(prompts[Math.floor(Math.random() * prompts.length)]);
+    setCurrentPrompt(prompt);
     setTimer(30);
     setHasSubmitted(false);
     setSelectedGif(null);
@@ -168,6 +188,9 @@ export default function Play() {
     setVotes({});
     setMyVote(null);
     addLiveEvent('Round started!');
+
+    // Broadcast game start to all players in the room
+    GameNotifier.broadcastEvent(currentUser.username, GameEvent.GameStart, { prompt }, roomCode);
   };
 
   const handlePhaseTransition = () => {
@@ -175,7 +198,7 @@ export default function Play() {
       setGamePhase('voting');
       setTimer(20);
       addLiveEvent('Voting phase started!');
-      
+
       // Auto-add my submission if I selected a GIF
       if (selectedGif && !hasSubmitted) {
         submitGif();
@@ -184,7 +207,7 @@ export default function Play() {
       setGamePhase('results');
       calculateResults();
       addLiveEvent('Round ended!');
-      
+
       // Auto-start next round after 5 seconds
       setTimeout(() => {
         startGame();
@@ -192,14 +215,9 @@ export default function Play() {
     }
   };
 
-  const addLiveEvent = (message) => {
-    const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    setLiveEvents(prev => [...prev.slice(-9), { time: now, message }]);
-  };
-
   const searchGiphy = () => {
     const apiKey = 'xy5U7pUUyNChw3G7AJXVBO6XaTZlB7bZ';
-    
+
     if (!searchQuery) return;
 
     setGifGrid([{ loading: true }]);
@@ -240,34 +258,40 @@ export default function Play() {
 
   const submitGif = () => {
     if (!selectedGif || hasSubmitted) return;
-    
+
     const newSubmission = {
       player: currentUser.username,
       gifUrl: selectedGif,
       votes: 0
     };
-    
+
     setSubmissions(prev => [...prev, newSubmission]);
     setHasSubmitted(true);
     addLiveEvent('You submitted your GIF!');
+
+    // Broadcast submission to other players
+    GameNotifier.broadcastEvent(currentUser.username, GameEvent.Submit, { gifUrl: selectedGif }, roomCode);
   };
 
   const handleVote = (index) => {
     if (gamePhase !== 'voting' || myVote !== null) return;
-    
+
     setMyVote(index);
     setVotes(prev => ({
       ...prev,
       [index]: (prev[index] || 0) + 1
     }));
     addLiveEvent('You voted!');
+
+    // Broadcast vote to other players
+    GameNotifier.broadcastEvent(currentUser.username, GameEvent.Vote, { index }, roomCode);
   };
 
   const calculateResults = () => {
-    // Simulate other players voting
+    // Tally final votes from all players
     const updatedSubmissions = submissions.map((sub, idx) => ({
       ...sub,
-      votes: (votes[idx] || 0) + Math.floor(Math.random() * 3)
+      votes: votes[idx] || 0
     }));
 
     setSubmissions(updatedSubmissions);
@@ -276,7 +300,7 @@ export default function Play() {
     const mySubmission = updatedSubmissions.find(s => s.player === currentUser?.username);
     if (mySubmission) {
       const maxVotes = Math.max(...updatedSubmissions.map(s => s.votes));
-      const won = mySubmission.votes === maxVotes;
+      const won = mySubmission.votes === maxVotes && maxVotes > 0;
       const scoreGain = mySubmission.votes * 100;
 
       // Submit results to backend
@@ -285,14 +309,20 @@ export default function Play() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ score: scoreGain, won }),
       }).catch(err => console.error('Failed to submit score:', err));
+
+      // Broadcast game end
+      const winner = updatedSubmissions.reduce((best, s) => s.votes > best.votes ? s : best, updatedSubmissions[0]);
+      GameNotifier.broadcastEvent(currentUser.username, GameEvent.GameEnd, { winner: winner.player }, roomCode);
     }
   };
 
   const leaveRoom = () => {
+    GameNotifier.leaveRoom(currentUser.username, roomCode);
     setInRoom(false);
     setGamePhase('lobby');
     localStorage.removeItem('currentRoom');
     setRoomCode('');
+    setPlayers([]);
   };
 
   // Lobby view (create/join room)
@@ -304,16 +334,16 @@ export default function Play() {
             <h2 className="mb-4">Game Lobby</h2>
             <div className="card p-4 shadow-sm game-card">
               <div className="d-grid gap-3">
-                <Button 
-                  variant="primary" 
+                <Button
+                  variant="primary"
                   size="lg"
                   onClick={createRoom}
                 >
                   Create New Room
                 </Button>
-                
+
                 <div className="text-muted">OR</div>
-                
+
                 <InputGroup>
                   <Form.Control
                     type="text"
@@ -470,9 +500,9 @@ export default function Play() {
               )}
               <div className="gif-grid">
                 {submissions.map((submission, idx) => (
-                  <div 
-                    key={idx} 
-                    className="gif-item text-center" 
+                  <div
+                    key={idx}
+                    className="gif-item text-center"
                     onClick={() => handleVote(idx)}
                     style={{ cursor: gamePhase === 'voting' && myVote === null ? 'pointer' : 'default' }}
                   >
@@ -500,4 +530,3 @@ export default function Play() {
     </main>
   );
 }
-

@@ -149,8 +149,8 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Backend listens for WebSocket connection** - I did not complete this part of the deliverable.
-- [ ] **Frontend makes WebSocket connection** - I did not complete this part of the deliverable.
-- [ ] **Data sent over WebSocket connection** - I did not complete this part of the deliverable.
-- [ ] **WebSocket data displayed** - I did not complete this part of the deliverable.
-- [ ] **Application is fully functional** - I did not complete this part of the deliverable.
+- [x] **Backend listens for WebSocket connection** - Created `service/peerProxy.js` which sets up a `WebSocketServer` on the `/ws` path attached to the Express HTTP server. It tracks connections by room using a `Map`, broadcasts messages to room members, and runs a ping/pong heartbeat to clean up dead connections.
+- [x] **Frontend makes WebSocket connection** - Created `src/play/gameNotifier.js` with a `GameEventNotifier` class that opens a WebSocket connection to `/ws` on page load, picking `ws://` or `wss://` based on protocol. It exposes `broadcastEvent`, `joinRoom`, and `leaveRoom` methods and a handler system for components to subscribe to events.
+- [x] **Data sent over WebSocket connection** - Game events (join, leave, submit, vote, gameStart, gameEnd) are serialized as JSON and sent over the socket. Players broadcast a `join` event when entering a room, a `submit` event with the chosen GIF URL, and a `vote` event with the submission index they voted for.
+- [x] **WebSocket data displayed** - The Play component subscribes to `GameNotifier` events in a `useEffect` and updates the live events feed, player list, submissions grid, and vote counts in real time as messages arrive.
+- [x] **Application is fully functional** - The full multiplayer flow runs over WebSocket. Multiple clients can join the same room, see each other in the lobby, submit GIFs, vote, and see results all synchronized in real time through the peer proxy.
